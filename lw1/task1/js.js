@@ -8,7 +8,7 @@ function drawRect(context, rect) {
 
 function drawEllipse(context, ellipse) {
     context.ellipse(ellipse.x, ellipse.y, ellipse.rx, ellipse.ry, 
-        ellipse.angle, 0, 2 * Math.PI);
+        ellipse.angle, 0, 2 * Math.PI)
     context.fill()
 }
 
@@ -21,7 +21,7 @@ function drawLastName(context, x, y) {
 
 function drawFirstName(context, x, y) {
     const topOffset = 15
-    const topHeight = 100;
+    const topHeight = 100
 
     context.fillStyle = 'blue'
     // Верхняя часть 
@@ -43,19 +43,44 @@ function drawPatronymic(context, x, y) {
 }
 
 function getCanvasContext() {
-    const canvas = document.getElementById('canvas');
-    return canvas?.getContext('2d');
+    const canvas = document.getElementById('canvas')
+    return canvas?.getContext('2d')
+}
+
+function animate(context, func, x, y) {
+    const maxTopY = y - 150
+    const canvas = document.getElementById('canvas')
+
+    let direction = 'U'
+    function draw() {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        func(context, x, currY)
+        currY += 'U' === direction ? -1 : 1
+
+        if (currY <= maxTopY) {
+            direction = 'D'
+        } else if (currY >= y) {
+            direction = 'U'
+        }
+    }
+
+    let currY = y
+    setInterval(() => {
+        draw(currY)
+    }, 10)
 }
 
 function drawInitials() {
-    const context = getCanvasContext();
-    drawLastName(context, 0, 0)
-    drawFirstName(context, 150, 0)
+    const context = getCanvasContext()
+    animate(context, drawLastName, 0, 0)
+    //animate(context, drawFirstName, 150, 0)
+    //drawLastName(context, 0, 0)
+    //drawFirstName(context, 150, 0)
     drawPatronymic(context, 300, 0)
 }
 
 function main() {
-    drawInitials();
+    drawInitials()
 }
 
 main()
