@@ -47,35 +47,10 @@ function getCanvasContext() {
     return canvas?.getContext('2d')
 }
 
-function animate(context, func, x, y) {
-    const maxTopY = y - 150
-    const canvas = document.getElementById('canvas')
-
-    let direction = 'U'
-    function draw() {
-        context.clearRect(0, 0, canvas.width, canvas.height)
-        func(context, x, currY)
-        currY += 'U' === direction ? -1 : 1
-
-        if (currY <= maxTopY) {
-            direction = 'D'
-        } else if (currY >= y) {
-            direction = 'U'
-        }
-    }
-
-    let currY = y
-    setInterval(() => {
-        draw(currY)
-    }, 10)
-}
-
 function drawInitials() {
     const context = getCanvasContext()
-    animate(context, drawLastName, 0, 0)
-    //animate(context, drawFirstName, 150, 0)
-    //drawLastName(context, 0, 0)
-    //drawFirstName(context, 150, 0)
+    drawLastName(context, 0, 0)
+    drawFirstName(context, 150, 0)
     drawPatronymic(context, 300, 0)
 }
 
