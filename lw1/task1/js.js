@@ -13,6 +13,7 @@ function drawEllipse(context, ellipse) {
 }
 
 function drawLastName(context, x, y) {
+    // трансформация для canvas
     context.fillStyle = 'red'
     drawRect(context, {x: x, y: y, width: SYMBOL_WIDTH, height: 30})
     drawRect(context, {x: x, y: y, width: 30, height: SYMBOL_HEIGHT})
