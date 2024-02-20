@@ -24,8 +24,8 @@
         style="opacity: 0; z-index: -1; width: 0; height: 0;"
     />
     <div style="
-        display: flex; flex-direction: column; margin: 10px;
-        border: 1px solid #000; border-radius: 20px; overflow: hidden;
+        width: 900px; border: 1px solid #000; border-radius: 20px; overflow: hidden;
+        margin: 0 10px;
     ">
         <div style="
             display: flex; flex-direction: row; gap: 15px; 
@@ -33,15 +33,20 @@
         ">
             <button onclick="onClickButtonNew()" class="button">New</button>
             <button onclick="onClickButtonOpen()" class="button">Open file</button>
+            <button onclick="onClickButtonSave('png')" class="button">Save as PNG</button>
+            <button onclick="onClickButtonSave('jpeg')" class="button">Save as JPEG</button>
+            <input id="color" type="color">
         </div>
-        <div style="height: 450px; position: relative;">
-            <img id="image" style="
-                opacity: 0; height: 450px; width: 100%; position: absolute;
-                pointer-events: none;
-            " />
+        <div id="div-image" style="
+            position: relative; background-repeat: no-repeat;
+            background-size: cover;
+        ">
+            <canvas width="900px" height="600px" id="canvas"></canvas>
         </div>
     </div>
 
+    <script src="./node_modules/file-saver/dist/FileSaver.js"></script>
+    <script src="./node_modules/html2canvas/dist/html2canvas.js"></script>
     <script src="./js.js"></script>
 </body>
 </html>
