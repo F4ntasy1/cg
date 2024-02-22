@@ -1,19 +1,22 @@
-const PIXEL_SIZE = 8
+const LINE_SIZE = 5
+const X_OFFSET = 12
+const Y_OFFSET = 69
 
 function getCanvasContext() {
     const canvas = document.getElementById('canvas')
     return canvas?.getContext('2d')
 }
 
-function drawPixel(context, x, y) {
+function drawLine(context, x, y) {
     const colorInput = document.getElementById('color')
-    context.fillStyle = colorInput.value
-    context.fillRect(x, y, PIXEL_SIZE, PIXEL_SIZE)
+    context.strokeStyle = colorInput.value
+    context.lineTo(x, y)
+    context.stroke()
 }
 
 function onChangeFile() {
     const input = document.getElementById('file').files[0]
-    const image = document.getElementById('div-image')
+    const image = document.getElementById('area')
 
     input.value = ''
 
@@ -31,7 +34,7 @@ function onChangeFile() {
 function onClickButtonNew() {
     const input = document.getElementById('file')
     input.value = ''
-    const image = document.getElementById('div-image')
+    const image = document.getElementById('area')
     image.style['background-image'] = 'none'
 
     const canvas = document.getElementById('canvas')
@@ -45,7 +48,7 @@ function onClickButtonOpen() {
 }
 
 function onClickButtonSave(format) {
-    const image = document.getElementById('div-image') 
+    const image = document.getElementById('area') 
 
     html2canvas(image).then(function(canvas) {
         canvas.toBlob(function(blob) {
@@ -55,21 +58,27 @@ function onClickButtonSave(format) {
 }
 
 function onMouseMoveHandler(context, e) {
-    drawPixel(context, e.clientX - 12, e.clientY - 69)
+    drawLine(context, e.clientX - X_OFFSET, e.clientY - Y_OFFSET)
 }
 
 function main() {
+    const area = document.getElementById('area')
+
     const context = getCanvasContext()
+    context.lineWidth = LINE_SIZE
+    context.lineCap = 'round'
 
     function onMouseMove(e) {
         onMouseMoveHandler(context, e)
     }
 
-    document.addEventListener('mousedown', () => {
-        document.addEventListener('mousemove', onMouseMove)
+    area.addEventListener('mousedown', (e) => {
+        context.beginPath()
+        context.moveTo(e.clientX - X_OFFSET, e.clientY - Y_OFFSET)
+        area.addEventListener('mousemove', onMouseMove)
     })
-    document.addEventListener('mouseup', () => {
-        document.removeEventListener('mousemove', onMouseMove)
+    area.addEventListener('mouseup', () => {
+        area.removeEventListener('mousemove', onMouseMove)
     })
 }
 
