@@ -1,0 +1,88 @@
+﻿using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+
+namespace c_test
+{
+    public class Window: GameWindow
+    {
+        private float frame = 0;
+        private int fps = 0;
+        private readonly string title;
+
+        public Window(NativeWindowSettings nativeWindowSettings) 
+            : base(GameWindowSettings.Default, nativeWindowSettings) 
+        {
+            Console.WriteLine(GL.GetString(StringName.Version));
+            VSync = VSyncMode.On;
+            title = nativeWindowSettings.Title;
+        }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+            // Цвет фона
+            GL.ClearColor(Color4.Gray);
+        }
+
+        protected override void OnResize(ResizeEventArgs e)
+        {
+            base.OnResize(e);
+	    // Изменение области рисования
+	    GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+        }
+
+        protected override void OnUpdateFrame(FrameEventArgs args)
+        {
+            base.OnUpdateFrame(args);
+            UpdateFramesCount(args.Time);
+        }
+
+        protected override void OnRenderFrame(FrameEventArgs args)
+        {
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            Draw();
+
+            SwapBuffers(); // двойная буферизация
+            base.OnRenderFrame(args);
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+        }
+
+        private void Draw()
+        {
+            /* Рисование
+            GL.LineWidth(10);
+
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(1.0f, 0.0f, 0.0f);
+            GL.Vertex2(0.0f, 0.0f);
+            GL.Vertex2(0.9f, 0.0f);
+            GL.End();
+
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(0.0f, 1.0f, 0.0f);
+            GL.Vertex2(0.0f, 0.5f);
+            GL.Vertex2(0.9f, 0.5f);
+            GL.End();
+            */
+        }
+
+        private void UpdateFramesCount(double time)
+        {
+            frame += (float)time;
+            fps++;
+            if (frame >= 1.0f)
+            {
+                Title = title + $" FPS - {fps}";
+                fps = 0;
+                frame = 0.0f;
+            }
+        }
+    }
+}
