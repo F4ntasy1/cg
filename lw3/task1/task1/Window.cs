@@ -33,7 +33,8 @@ namespace task1
         protected override void OnResize(ResizeEventArgs e)
         {
             base.OnResize(e);
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+            int size = ClientSize.X < ClientSize.Y ? ClientSize.X : ClientSize.Y;
+	    GL.Viewport(0, 0, size, size);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
