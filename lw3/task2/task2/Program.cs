@@ -8,7 +8,7 @@ class Program
     {
         NativeWindowSettings nativeWindowSettings = new()
         {
-            ClientSize = new Vector2i(1200, 1200),
+            ClientSize = new Vector2i(900, 900),
             Title = "My window",
             Flags = OpenTK.Windowing.Common.ContextFlags.Default,
             Profile = OpenTK.Windowing.Common.ContextProfile.Compatability,

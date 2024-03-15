@@ -1,4 +1,5 @@
 const TOP_OFFSET = 20
+// сделать таскание видимым
 
 function onChangeFile() {
     const input = document.getElementById('file').files[0]
