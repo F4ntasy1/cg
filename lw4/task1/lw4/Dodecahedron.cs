@@ -19,6 +19,8 @@ namespace lw4
             GL.Color3(0.0f, 1.0f, 0.0f);
             GL.Vertex3(0.0f, 0.0f, 0.0f);
 
+
+
             GL.End();
         }
     }
