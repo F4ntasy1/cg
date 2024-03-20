@@ -54,8 +54,34 @@ namespace Drawing
             }
 
             GL.End();
+
+            DrawLines();
         }
 
         protected abstract PrimitiveType GetPrimiviteType();
+
+        private void DrawLines()
+        {
+            GL.Begin(PrimitiveType.Lines);
+            GL.LineWidth(10);
+            GL.Color3(0.0f, 0.0f, 0.0f);
+
+            foreach (Point p1 in m_points)
+            {
+                foreach (Point p2 in m_points)
+                {
+                    if ((p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z != p2.m_z) ||
+                        (p1.m_x == p2.m_x && p1.m_z == p2.m_z && p1.m_y != p2.m_y) ||
+                        (p1.m_y == p2.m_y && p1.m_z == p2.m_z && p1.m_x != p2.m_x) ||
+                        (m_points.Length <= 3))
+                    {
+                        GL.Vertex3(p1.m_x, p1.m_y, p1.m_z);
+                        GL.Vertex3(p2.m_x, p2.m_y, p2.m_z);
+                    }
+                }
+            }
+
+            GL.End();
+        }
     }
 }

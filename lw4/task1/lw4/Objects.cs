@@ -46,15 +46,29 @@ namespace Objects
 
         public void Draw()
         {
+            List<Color> colors = [
+                new(m_color.m_r, m_color.m_g, m_color.m_b, m_color.m_a),
+                new(m_color.m_r, m_color.m_g, m_color.m_b - 0.2f, m_color.m_a + 0.05f),
+                new(m_color.m_r, m_color.m_g, m_color.m_b + 0.05f, m_color.m_a + 0.15f)
+            ];
+
+            int colorIndex = 0;
+
             foreach (Polygon drawable in m_polygons)
             {
-                drawable.SetColor(m_color);
+                drawable.SetColor(colors[colorIndex]);
                 drawable.Draw();
+
+                colorIndex++;
+                if (colorIndex >= colors.Count) colorIndex = 0;
             }
             foreach (IDrawable drawable in m_triangles)
             {
-                drawable.SetColor(m_color);
+                drawable.SetColor(colors[colorIndex]);
                 drawable.Draw();
+
+                colorIndex++;
+                if (colorIndex >= colors.Count) colorIndex = 0;
             }
         }
 
@@ -62,40 +76,40 @@ namespace Objects
         {
             m_polygons.Add(new Polygon([
                 m_topSquare.m_bottomLeft, m_topSquare.m_bottomRight, m_topSquare.m_leftTop, m_topSquare.m_rightTop
-            ], m_color));
+            ]));
             // Top-sides
             // Left
             m_polygons.Add(new Polygon([
                 m_leftSquare.m_leftTop, m_leftSquare.m_rightTop, m_topSquare.m_bottomLeft, m_topSquare.m_leftTop
-            ], m_color));
+            ]));
             // Right
             m_polygons.Add(new Polygon([
                 m_rightSquare.m_leftTop, m_rightSquare.m_rightTop, m_topSquare.m_bottomRight, m_topSquare.m_rightTop
-            ], m_color));
+            ]));
             // Back
             m_polygons.Add(new Polygon([
                 m_backSquare.m_leftTop, m_backSquare.m_rightTop, m_topSquare.m_bottomLeft, m_topSquare.m_bottomRight
-            ], m_color));
+            ]));
             // Front
             m_polygons.Add(new Polygon([
                 m_frontSquare.m_leftTop, m_frontSquare.m_rightTop, m_topSquare.m_leftTop, m_topSquare.m_rightTop
-            ], m_color));
+            ]));
             // Back left
             m_triangles.Add(new Triangle([
                 m_backSquare.m_leftTop, m_leftSquare.m_leftTop, m_topSquare.m_bottomLeft
-            ], m_color));
+            ]));
             // Back right
             m_triangles.Add(new Triangle([
                 m_backSquare.m_rightTop, m_rightSquare.m_leftTop, m_topSquare.m_bottomRight
-            ], m_color));
+            ]));
             // Front left
             m_triangles.Add(new Triangle([
                 m_frontSquare.m_leftTop, m_leftSquare.m_rightTop, m_topSquare.m_leftTop
-            ], m_color));
+            ]));
             // Front right
             m_triangles.Add(new Triangle([
                 m_frontSquare.m_rightTop, m_rightSquare.m_rightTop, m_topSquare.m_rightTop
-            ], m_color));
+            ]));
         }
 
         private void InitializeBottomPrimitives()
