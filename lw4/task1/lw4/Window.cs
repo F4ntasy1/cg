@@ -2,36 +2,10 @@
 using OpenTK.Windowing.Desktop;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
-using lw4;
+using Drawing;
 
 namespace task1
 {
-    public class Color
-    {
-        public float m_r; 
-        public float m_g; 
-        public float m_b;
-
-        public Color(float r, float g, float b)
-        {
-            m_r = r;
-            m_g = g;
-            m_b = b;
-        }
-    }
-
-    public class Point
-    {
-        public float m_x;
-        public float m_y;
-
-        public Point(float x, float y)
-        {
-            m_x = x; 
-            m_y = y;
-        }
-    }
-
     public class Window : GameWindow
     {
         private float m_frame = 0;
@@ -47,8 +21,9 @@ namespace task1
             VSync = VSyncMode.On;
             m_title = nativeWindowSettings.Title;
             //GL.Enable(EnableCap.DepthTest);
-            //GL.Enable(EnableCap.Blend);
-            //GL.LoadIdentity();
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.Enable(EnableCap.Blend);
+            GL.LoadIdentity();
             GL.MatrixMode(MatrixMode.Modelview);
         }
 
@@ -76,8 +51,8 @@ namespace task1
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            GL.Rotate(0.7, 0.0f, 1.0f, 0.0f);
-            GL.Rotate(0.5, 0.0f, 1.0f, 1.0f);
+            GL.Rotate(0.3, 0.0f, 1.0f, 0.0f);
+            GL.Rotate(0.2, 0.0f, 1.0f, 1.0f);
 
             foreach (IDrawable drawable in m_drawables)
             {
@@ -91,34 +66,6 @@ namespace task1
         protected override void OnUnload()
         {
             base.OnUnload();
-        }
-
-        private void DrawPolygon(Point[] points, Color color)
-        {
-            GL.Begin(PrimitiveType.TriangleStrip);
-            GL.Color3(color.m_r, color.m_g, color.m_b);
-
-            foreach (Point p in points)
-            {
-                GL.Vertex2(p.m_x, p.m_y);
-            }
-
-            GL.End();
-        }
-
-        private void DrawCircle(float radius, Point center, Color color)
-        {
-            GL.Begin(PrimitiveType.TriangleFan);
-            GL.Color3(color.m_r, color.m_g, color.m_b);
-
-            GL.Vertex2(center.m_x, center.m_y);
-            for (int angle = 0; angle < 360; angle++)
-            {
-                GL.Vertex2(center.m_x + Math.Cos(angle) * radius, 
-                    center.m_y + Math.Sin(angle) * radius);
-            }
-
-            GL.End();
         }
 
         private void UpdateFramesCount(double time)

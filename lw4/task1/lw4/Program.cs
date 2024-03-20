@@ -1,4 +1,5 @@
-﻿using lw4;
+﻿using Drawing;
+using Objects;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using task1;
@@ -16,9 +17,9 @@ class Program
             API = OpenTK.Windowing.Common.ContextAPI.OpenGL
         };
 
-        IDrawable dodecahedron = new Dodecahedron();
+        IDrawable rhombocuboctahedron = new Rhombocuboctahedron(0.7f);
 
-        Window window = new(nativeWindowSettings, [dodecahedron]);
+        Window window = new(nativeWindowSettings, [rhombocuboctahedron]);
         window.Run();
     }
 }
