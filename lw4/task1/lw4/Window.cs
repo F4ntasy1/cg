@@ -20,10 +20,8 @@ namespace task1
             m_drawables = drawables;
             VSync = VSyncMode.On;
             m_title = nativeWindowSettings.Title;
-            //GL.Enable(EnableCap.DepthTest);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Blend);
-            GL.LoadIdentity();
             GL.MatrixMode(MatrixMode.Modelview);
         }
 
@@ -45,14 +43,15 @@ namespace task1
         {
             base.OnUpdateFrame(args);
             UpdateFramesCount(args.Time);
+
+            GL.Rotate(0.3, 1.0f, 0.0f, 0.0f);
+            GL.Rotate(0.15, 0.0f, 0.0f, 1.0f);
+            GL.Rotate(0.4, 0.0f, 1.0f, 0.0f);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
-
-            GL.Rotate(0.3, 0.0f, 1.0f, 0.0f);
-            GL.Rotate(0.2, 0.0f, 1.0f, 1.0f);
 
             foreach (IDrawable drawable in m_drawables)
             {

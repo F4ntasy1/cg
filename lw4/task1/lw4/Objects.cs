@@ -1,5 +1,4 @@
-﻿using OpenTK.Graphics.OpenGL;
-using Drawing;
+﻿using Drawing;
 using Primitives;
 
 namespace Objects
@@ -20,8 +19,8 @@ namespace Objects
 
         public Rhombocuboctahedron(float size, Color ?color = null)
         {
-            float squareLength = size / 2;
-            float centerToSquareDistance = size / 2;
+            float squareLength = size / 1.8f;
+            float centerToSquareDistance = size / 1.5f;
 
             m_backSquare = new(new(0.0f, 0.0f, -centerToSquareDistance), squareLength, Axis.X, Axis.Y);
             m_frontSquare = new(new(0.0f, 0.0f, centerToSquareDistance), squareLength, Axis.X, Axis.Y);
@@ -32,7 +31,7 @@ namespace Objects
             m_topSquare = new(new(0.0f, centerToSquareDistance, 0.0f), squareLength, Axis.Z, Axis.X);
             m_bottomSquare = new(new(0.0f, -centerToSquareDistance, 0.0f), squareLength, Axis.Z, Axis.X);
 
-            m_color = color ?? new(0.0f, 0.0f, 0.0f, 0.5f); ;
+            m_color = color ?? new(0.0f, 0.0f, 0.0f, 0.5f);
 
             InitializeTopPrimitives();
             InitializeSidesPrimitives();
@@ -74,10 +73,10 @@ namespace Objects
 
         private void InitializeTopPrimitives()
         {
+            // Top
             m_polygons.Add(new Polygon([
                 m_topSquare.m_bottomLeft, m_topSquare.m_bottomRight, m_topSquare.m_leftTop, m_topSquare.m_rightTop
             ]));
-            // Top-sides
             // Left
             m_polygons.Add(new Polygon([
                 m_leftSquare.m_leftTop, m_leftSquare.m_rightTop, m_topSquare.m_bottomLeft, m_topSquare.m_leftTop
@@ -114,12 +113,93 @@ namespace Objects
 
         private void InitializeBottomPrimitives()
         {
+            // Bottom
+            m_polygons.Add(new Polygon([
+                m_bottomSquare.m_bottomLeft, m_bottomSquare.m_bottomRight,
+                m_bottomSquare.m_leftTop, m_bottomSquare.m_rightTop
+            ]));
+            // Left
+            m_polygons.Add(new Polygon([
+                m_leftSquare.m_bottomLeft, m_leftSquare.m_bottomRight,
+                m_bottomSquare.m_bottomLeft, m_bottomSquare.m_leftTop
+            ]));
+            // Right
+            m_polygons.Add(new Polygon([
+                m_rightSquare.m_bottomLeft, m_rightSquare.m_bottomRight,
+                m_bottomSquare.m_bottomRight, m_bottomSquare.m_rightTop
+            ]));
+            // Back
+            m_polygons.Add(new Polygon([
+                m_backSquare.m_bottomLeft, m_backSquare.m_bottomRight, 
+                m_bottomSquare.m_bottomLeft, m_bottomSquare.m_bottomRight
+            ]));
+            // Front
+            m_polygons.Add(new Polygon([
+                m_frontSquare.m_bottomLeft, m_frontSquare.m_bottomRight,
+                m_bottomSquare.m_leftTop, m_bottomSquare.m_rightTop
+            ]));
 
+            // Back left
+            m_triangles.Add(new Triangle([
+                m_backSquare.m_bottomLeft, m_leftSquare.m_bottomLeft, m_bottomSquare.m_bottomLeft
+            ]));
+            // Back right
+            m_triangles.Add(new Triangle([
+                m_backSquare.m_bottomRight, m_rightSquare.m_bottomLeft, m_bottomSquare.m_bottomRight
+            ]));
+            // Front left
+            m_triangles.Add(new Triangle([
+                m_frontSquare.m_bottomLeft, m_leftSquare.m_bottomRight, m_bottomSquare.m_leftTop
+            ]));
+            // Front right
+            m_triangles.Add(new Triangle([
+                m_frontSquare.m_bottomRight, m_rightSquare.m_bottomRight, m_bottomSquare.m_rightTop
+            ]));
         }
 
         private void InitializeSidesPrimitives()
         {
+            // Left
+            m_polygons.Add(new Polygon([
+                m_leftSquare.m_bottomLeft, m_leftSquare.m_bottomRight,
+                m_leftSquare.m_leftTop, m_leftSquare.m_rightTop
+            ]));
+            // Right
+            m_polygons.Add(new Polygon([
+                m_rightSquare.m_bottomLeft, m_rightSquare.m_bottomRight,
+                m_rightSquare.m_leftTop, m_rightSquare.m_rightTop
+            ]));
+            // Back
+            m_polygons.Add(new Polygon([
+                m_backSquare.m_bottomLeft, m_backSquare.m_bottomRight,
+                m_backSquare.m_leftTop, m_backSquare.m_rightTop
+            ]));
+            // Front
+            m_polygons.Add(new Polygon([
+                m_frontSquare.m_bottomLeft, m_frontSquare.m_bottomRight,
+                m_frontSquare.m_leftTop, m_frontSquare.m_rightTop
+            ]));
 
+            // Back Left
+            m_polygons.Add(new Polygon([
+                m_leftSquare.m_bottomLeft, m_backSquare.m_bottomLeft,
+                m_leftSquare.m_leftTop, m_backSquare.m_leftTop
+            ]));
+            // Back Right
+            m_polygons.Add(new Polygon([
+                m_rightSquare.m_bottomLeft, m_backSquare.m_bottomRight,
+                m_rightSquare.m_leftTop, m_backSquare.m_rightTop
+            ]));
+            // Front Left
+            m_polygons.Add(new Polygon([
+                m_leftSquare.m_bottomRight, m_frontSquare.m_bottomLeft,
+                m_leftSquare.m_rightTop, m_frontSquare.m_leftTop
+            ]));
+            // Front Right
+            m_polygons.Add(new Polygon([
+                m_rightSquare.m_bottomRight, m_frontSquare.m_bottomRight,
+                m_rightSquare.m_rightTop, m_frontSquare.m_rightTop
+            ]));
         }
     }
 }

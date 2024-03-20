@@ -33,7 +33,6 @@ namespace Drawing
 
         public Drawable(Point[] points, Color? color = null)
         {
-            /* Порядок points важен! */
             m_points = points;
             m_color = color ?? new(0.0f, 0.0f, 0.0f);
         }
@@ -63,13 +62,15 @@ namespace Drawing
         private void DrawLines()
         {
             GL.Begin(PrimitiveType.Lines);
-            GL.LineWidth(10);
+            GL.LineWidth(1);
             GL.Color3(0.0f, 0.0f, 0.0f);
 
-            foreach (Point p1 in m_points)
+            for (int i = 0; i < m_points.Length; i++)
             {
-                foreach (Point p2 in m_points)
+                Point p1 = m_points[i];
+                for (int j = i; j < m_points.Length; j++)
                 {
+                    Point p2 = m_points[j];
                     if ((p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z != p2.m_z) ||
                         (p1.m_x == p2.m_x && p1.m_z == p2.m_z && p1.m_y != p2.m_y) ||
                         (p1.m_y == p2.m_y && p1.m_z == p2.m_z && p1.m_x != p2.m_x) ||

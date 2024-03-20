@@ -52,10 +52,6 @@ namespace Primitives
 
         private void InitializePointsForXYPlane(Point center, float centreToEdgeDistance)
         {
-            // для X, Y: leftTop.x = c.x - len, leftTop.y = c.y + len
-            // для X, Y: rightTop.x = c.x + len, rightTop.y = c.y + len
-            // для X, Y: bottomLeft.x = c.x - len, bottomLeft.y = c.y - len
-            // для X, Y: bottomRight.x = c.x + len, bottomRight.y = c.y - len
             m_leftTop.m_z = center.m_z;
             m_leftTop.m_x = center.m_x - centreToEdgeDistance;
             m_leftTop.m_y = center.m_y + centreToEdgeDistance;
@@ -75,10 +71,6 @@ namespace Primitives
 
         private void InitializePointsForZYPlane(Point center, float centreToEdgeDistance)
         {
-            // для Z, Y: leftTop.z = c.z - len, leftTop.y = c.y + len
-            // для Z, Y: rightTop.z = c.z + len, rightTop.y = c.y + len
-            // для Z, Y: bottomLeft.z = c.z - len, bottomLeft.y = c.y - len
-            // для Z, Y: bottomRight.z = c.z + len, bottomRight.y = c.y - len
             m_leftTop.m_x = center.m_x;
             m_leftTop.m_z = center.m_z - centreToEdgeDistance;
             m_leftTop.m_y = center.m_y + centreToEdgeDistance;
@@ -98,10 +90,6 @@ namespace Primitives
 
         private void InitializePointsForZXPlane(Point center, float centreToEdgeDistance)
         {
-            // для Z, X: leftTop.z = c.z + len, leftTop.x = c.x - len
-            // для Z, X: rightTop.z = c.z + len, rightTop.x = c.x + len
-            // для Z, X: bottomLeft.z = c.z - len, bottomLeft.x = c.x - len
-            // для Z, X: bottomRight.z = c.z - len, bottomRight.x = c.x + len
             m_leftTop.m_y = center.m_y;
             m_leftTop.m_z = center.m_z + centreToEdgeDistance;
             m_leftTop.m_x = center.m_x - centreToEdgeDistance;
