@@ -44,23 +44,63 @@ namespace Drawing
 
         public void Draw()
         {
-            GL.Begin(GetPrimiviteType());
-            GL.Color4(m_color.m_r, m_color.m_g, m_color.m_b, m_color.m_a);
-
-            foreach (Point p in m_points)
-            {
-                GL.Vertex3(p.m_x, p.m_y, p.m_z);
-            }
-
-            GL.End();
+            //GL.ShadeModel(Shading);
+            //GL.Translate(Position);
+            //GL.Scale(Scale, Scale, Scale);
 
             DrawLines();
+
+            GL.Enable(EnableCap.CullFace);
+
+            GL.CullFace(CullFaceMode.Front);
+            GL.FrontFace(FrontFaceDirection.Cw);
+            DrawOpaque();
+
+            GL.CullFace(CullFaceMode.Back);
+            //DrawOpaque();
+
+            GL.Disable(EnableCap.CullFace);
         }
 
         protected abstract PrimitiveType GetPrimiviteType();
 
+        private void DrawOpaque()
+        {
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            GL.Enable(EnableCap.PolygonOffsetFill);
+            if (m_color.m_a < 1.0f)
+            {
+                GL.Enable(EnableCap.Blend);
+                GL.DepthMask(false);
+            }
+
+            GL.Begin(GetPrimiviteType());
+            GL.Color4(m_color.m_r, m_color.m_g, m_color.m_b, m_color.m_a);
+            foreach (Point p in m_points)
+            {
+                GL.Vertex3(p.m_x, p.m_y, p.m_z);
+            }
+            GL.End();
+
+            if (m_color.m_a < 1.0f)
+            {
+                GL.Disable(EnableCap.Blend);
+                GL.DepthMask(true);
+            }
+        }
+
         private void DrawLines()
         {
+            GL.Disable(EnableCap.PolygonOffsetFill);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            /*
+            if (m_color.m_a < 1.0f)
+            {
+                GL.Enable(EnableCap.Blend);
+                GL.DepthMask(false);
+            }
+            */
+
             GL.Begin(PrimitiveType.Lines);
             GL.LineWidth(1);
             GL.Color3(0.0f, 0.0f, 0.0f);

@@ -4,6 +4,10 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using Drawing;
 
+// центрирование при изменении размеров окна
+// ребра у лицевых граней должны быть черными
+// режим отбраковки граней
+// Как определить что все грани перечисляются в одном порядке? команда в openGl
 namespace task1
 {
     public class Window : GameWindow
@@ -20,9 +24,11 @@ namespace task1
             m_drawables = drawables;
             VSync = VSyncMode.On;
             m_title = nativeWindowSettings.Title;
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.Blend);
-            GL.MatrixMode(MatrixMode.Modelview);
+            //GL.Enable(EnableCap.DepthTest);
+            //GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            //GL.Enable(EnableCap.Blend);
+            //GL.MatrixMode(MatrixMode.Modelview);
+            //GL.PolygonMode(MaterialFace.Front, PolygonMode.Point);
         }
 
         protected override void OnLoad()
@@ -36,7 +42,8 @@ namespace task1
         {
             base.OnResize(e);
             int size = ClientSize.X < ClientSize.Y ? ClientSize.X : ClientSize.Y;
-            GL.Viewport(0, 0, size, size);
+            int xPos = size < ClientSize.X ? ClientSize.X - size : 0;
+            GL.Viewport(xPos / 2, 0, size, size);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -53,9 +60,13 @@ namespace task1
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
+            GL.Enable(EnableCap.Normalize);
+            GL.Enable(EnableCap.RescaleNormal);
             foreach (IDrawable drawable in m_drawables)
             {
+                GL.PushMatrix();
                 drawable.Draw();
+                GL.PopMatrix();
             }
 
             SwapBuffers(); // двойная буферизация
