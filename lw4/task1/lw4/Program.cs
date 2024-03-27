@@ -17,7 +17,7 @@ class Program
             API = OpenTK.Windowing.Common.ContextAPI.OpenGL
         };
 
-        IDrawable rhombocuboctahedron = new Rhombocuboctahedron(0.7f, new(0.18f, 0.51f, 0.31f, 0.6f));
+        IDrawable rhombocuboctahedron = new Rhombocuboctahedron(0.7f, new(0.18f, 0.51f, 0.31f, 0.75f));
 
         Window window = new(nativeWindowSettings, [rhombocuboctahedron]);
         window.Run();

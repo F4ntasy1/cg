@@ -23,6 +23,8 @@ namespace Drawing
     {
         public void Draw();
 
+        public void DrawLines();
+
         public void SetColor(Color color);
     }
 
@@ -44,85 +46,18 @@ namespace Drawing
 
         public void Draw()
         {
-            //GL.ShadeModel(Shading);
-            //GL.Translate(Position);
-            //GL.Scale(Scale, Scale, Scale);
-
-            DrawLines();
-
-            GL.Enable(EnableCap.CullFace);
-
-            GL.CullFace(CullFaceMode.Front);
-            GL.FrontFace(FrontFaceDirection.Cw);
-            DrawOpaque();
-
-            GL.CullFace(CullFaceMode.Back);
-            //DrawOpaque();
-
-            GL.Disable(EnableCap.CullFace);
-        }
-
-        protected abstract PrimitiveType GetPrimiviteType();
-
-        private void DrawOpaque()
-        {
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            GL.Enable(EnableCap.PolygonOffsetFill);
-            if (m_color.m_a < 1.0f)
-            {
-                GL.Enable(EnableCap.Blend);
-                GL.DepthMask(false);
-            }
-
             GL.Begin(GetPrimiviteType());
             GL.Color4(m_color.m_r, m_color.m_g, m_color.m_b, m_color.m_a);
+
             foreach (Point p in m_points)
             {
                 GL.Vertex3(p.m_x, p.m_y, p.m_z);
             }
             GL.End();
-
-            if (m_color.m_a < 1.0f)
-            {
-                GL.Disable(EnableCap.Blend);
-                GL.DepthMask(true);
-            }
         }
 
-        private void DrawLines()
-        {
-            GL.Disable(EnableCap.PolygonOffsetFill);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-            /*
-            if (m_color.m_a < 1.0f)
-            {
-                GL.Enable(EnableCap.Blend);
-                GL.DepthMask(false);
-            }
-            */
+        public abstract void DrawLines();
 
-            GL.Begin(PrimitiveType.Lines);
-            GL.LineWidth(1);
-            GL.Color3(0.0f, 0.0f, 0.0f);
-
-            for (int i = 0; i < m_points.Length; i++)
-            {
-                Point p1 = m_points[i];
-                for (int j = i; j < m_points.Length; j++)
-                {
-                    Point p2 = m_points[j];
-                    if ((p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z != p2.m_z) ||
-                        (p1.m_x == p2.m_x && p1.m_z == p2.m_z && p1.m_y != p2.m_y) ||
-                        (p1.m_y == p2.m_y && p1.m_z == p2.m_z && p1.m_x != p2.m_x) ||
-                        (m_points.Length <= 3))
-                    {
-                        GL.Vertex3(p1.m_x, p1.m_y, p1.m_z);
-                        GL.Vertex3(p2.m_x, p2.m_y, p2.m_z);
-                    }
-                }
-            }
-
-            GL.End();
-        }
+        protected abstract PrimitiveType GetPrimiviteType();
     }
 }

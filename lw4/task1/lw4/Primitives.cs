@@ -115,6 +115,26 @@ namespace Primitives
         {
         }
 
+        public override void DrawLines()
+        {
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(0.0f, 0.0f, 0.0f);
+
+            GL.Vertex3(m_points[0].m_x, m_points[0].m_y, m_points[0].m_z);
+            GL.Vertex3(m_points[1].m_x, m_points[1].m_y, m_points[1].m_z);
+
+            GL.Vertex3(m_points[0].m_x, m_points[0].m_y, m_points[0].m_z);
+            GL.Vertex3(m_points[2].m_x, m_points[2].m_y, m_points[2].m_z);
+
+            GL.Vertex3(m_points[1].m_x, m_points[1].m_y, m_points[1].m_z);
+            GL.Vertex3(m_points[3].m_x, m_points[3].m_y, m_points[3].m_z);
+
+            GL.Vertex3(m_points[2].m_x, m_points[2].m_y, m_points[2].m_z);
+            GL.Vertex3(m_points[3].m_x, m_points[3].m_y, m_points[3].m_z);
+
+            GL.End();
+        }
+
         protected override PrimitiveType GetPrimiviteType()
         {
             return PrimitiveType.TriangleStrip;
@@ -130,6 +150,18 @@ namespace Primitives
             {
                 throw new ArgumentException("Triangle must contain 3 points");
             }
+        }
+
+        public override void DrawLines()
+        {
+            GL.Begin(PrimitiveType.LineLoop);
+            GL.Color3(0.0f, 0.0f, 0.0f);
+
+            GL.Vertex3(m_points[0].m_x, m_points[0].m_y, m_points[0].m_z);
+            GL.Vertex3(m_points[1].m_x, m_points[1].m_y, m_points[1].m_z);
+            GL.Vertex3(m_points[2].m_x, m_points[2].m_y, m_points[2].m_z);
+
+            GL.End();
         }
 
         protected override PrimitiveType GetPrimiviteType()

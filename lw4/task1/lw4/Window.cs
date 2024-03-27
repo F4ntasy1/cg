@@ -3,11 +3,8 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using Drawing;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
-// центрирование при изменении размеров окна
-// ребра у лицевых граней должны быть черными
-// режим отбраковки граней
-// Как определить что все грани перечисляются в одном порядке? команда в openGl
 namespace task1
 {
     public class Window : GameWindow
@@ -18,17 +15,16 @@ namespace task1
 
         private readonly IDrawable[] m_drawables;
 
+        private bool m_leftButtonPressed = false;
+        private float m_mouseX = 0;
+        private float m_mouseY = 0;
+
         public Window(NativeWindowSettings nativeWindowSettings, IDrawable[] drawables)
             : base(GameWindowSettings.Default, nativeWindowSettings)
         {
             m_drawables = drawables;
             VSync = VSyncMode.On;
             m_title = nativeWindowSettings.Title;
-            //GL.Enable(EnableCap.DepthTest);
-            //GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            //GL.Enable(EnableCap.Blend);
-            //GL.MatrixMode(MatrixMode.Modelview);
-            //GL.PolygonMode(MaterialFace.Front, PolygonMode.Point);
         }
 
         protected override void OnLoad()
@@ -36,6 +32,13 @@ namespace task1
             base.OnLoad();
             // Цвет фона
             GL.ClearColor(Color4.White);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+
+            GL.Scale(1.5f, 1.5f, 1.5f);
+
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -50,23 +53,33 @@ namespace task1
         {
             base.OnUpdateFrame(args);
             UpdateFramesCount(args.Time);
-
-            GL.Rotate(0.3, 1.0f, 0.0f, 0.0f);
-            GL.Rotate(0.15, 0.0f, 0.0f, 1.0f);
-            GL.Rotate(0.4, 0.0f, 1.0f, 0.0f);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.Enable(EnableCap.Normalize);
-            GL.Enable(EnableCap.RescaleNormal);
+            GL.LineWidth(3);
+
             foreach (IDrawable drawable in m_drawables)
             {
-                GL.PushMatrix();
+                GL.Disable(EnableCap.DepthTest);
+                GL.Enable(EnableCap.Blend);
+                GL.Enable(EnableCap.AlphaTest);
+                GL.Enable(EnableCap.CullFace);
+
+                GL.CullFace(CullFaceMode.Back);
                 drawable.Draw();
-                GL.PopMatrix();
+
+                GL.CullFace(CullFaceMode.Front);
+                drawable.Draw();
+
+                GL.Disable(EnableCap.CullFace);
+                GL.Enable(EnableCap.DepthTest);
+                GL.Disable(EnableCap.Blend);
+                GL.Disable(EnableCap.AlphaTest);
+
+                drawable.DrawLines();
             }
 
             SwapBuffers(); // двойная буферизация
@@ -76,6 +89,63 @@ namespace task1
         protected override void OnUnload()
         {
             base.OnUnload();
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (e.Button == MouseButton.Left)
+            {
+                m_leftButtonPressed = true;
+                m_mouseX = MousePosition.X;
+                m_mouseY = MousePosition.Y;
+            }
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            if (!m_leftButtonPressed) return;
+
+            float dx = e.X - m_mouseX;
+            float dy = e.Y - m_mouseY;
+
+            // Поворот по Х = смещение мыши по Y и наоборот для Y
+            float rotateX = dy * 180 / this.Size.X;
+            float rotateY = dx * 180 / this.Size.Y;
+            RotateCamera(-rotateX, -rotateY);
+
+            m_mouseX = e.X;
+            m_mouseY = e.Y;
+
+            base.OnMouseMove(e);
+
+            OnRenderFrame(new FrameEventArgs());
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            m_leftButtonPressed = false;
+            base.OnMouseUp(e);
+        }
+
+        protected override void OnMouseLeave()
+        {
+            m_leftButtonPressed = false;
+            base.OnMouseLeave();
+        }
+
+        private void RotateCamera(float x, float y)
+        {
+            //нужно ортонормировать матрицу
+            GL.MatrixMode(MatrixMode.Modelview);
+
+            GL.GetFloat(GetPName.ModelviewMatrix, out Matrix4 modelView);
+
+            Vector3 xAxis = new(modelView[0, 0], modelView[1, 0], modelView[2, 0]);
+            Vector3 yAxis = new(modelView[0, 1], modelView[1, 1], modelView[2, 1]);
+
+            GL.Rotate(x, xAxis);
+            GL.Rotate(y, yAxis);
         }
 
         private void UpdateFramesCount(double time)
