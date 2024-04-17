@@ -32,11 +32,6 @@ namespace task2
             GL.ClearColor(Color4.Gray);
 
             GL.Enable(EnableCap.DepthTest);
-            GL.MatrixMode(MatrixMode.Modelview);
-
-            GL.LoadIdentity();
-            GL.Translate(0f, 0f, -2f);
-            GL.Scale(0.5f, 0.5f, 0.5f);
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -46,7 +41,10 @@ namespace task2
 
             GL.Viewport(0, 0, width, height);
 
+            GL.PushMatrix();
             SetupProjectionMatrix(width, height);
+            GL.Translate(0.0f, 0.0f, -5.0f);
+            GL.PopMatrix();
 
             base.OnResize(e);
         }
@@ -62,14 +60,22 @@ namespace task2
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.Enable(EnableCap.CullFace);
 
-            foreach (IDrawable drawable in m_drawables)
+            GL.PushMatrix();
+
+            for (int i = 0; i < m_drawables.Length; i++)
             {
+                GL.Translate(0.0f, 0.0f, -i * 5.0f);
+
+                IDrawable drawable = m_drawables[i];
+
                 GL.CullFace(CullFaceMode.Front);
                 drawable.Draw();
 
                 GL.CullFace(CullFaceMode.Back);
                 drawable.Draw();
             }
+
+            GL.PopMatrix();
 
             SwapBuffers();
             base.OnRenderFrame(args);
@@ -126,6 +132,7 @@ namespace task2
         private void SetupProjectionMatrix(int width, int height)
         {
             GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
 
             double frustumSize = 0.5;
 
@@ -142,7 +149,7 @@ namespace task2
             GL.Frustum(
                 -frustumWidth * 0.5, frustumWidth * 0.5, // left, right
                 -frustumHeight * 0.5, frustumHeight * 0.5, // top, bottom
-                frustumSize * 0.5, frustumSize * 10 // znear, zfar
+                frustumSize * 0.5, frustumSize * 50 // znear, zfar
             );
         }
 

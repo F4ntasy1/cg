@@ -7,7 +7,7 @@ namespace task2
     {
         private readonly float R = 2f;
         private readonly float r = 0.5f;
-        private readonly float step = MathF.PI / 50;
+        private readonly float step = MathF.PI / 30;
 
         private void SetVertex(float a, float b)
         {

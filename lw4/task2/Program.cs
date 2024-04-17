@@ -21,9 +21,11 @@ class Program
             NumberOfSamples = 0
         };
 
-        Torus torus = new();
+        Torus torus1 = new();
+        Torus torus2 = new();
+        Torus torus3 = new();
 
-        Window window = new(nativeWindowSettings, [torus]);
+        Window window = new(nativeWindowSettings, [torus1, torus2, torus3]);
         window.Run();
     }
 }
