@@ -29,22 +29,26 @@ namespace task2
         protected override void OnLoad()
         {
             base.OnLoad();
-            GL.ClearColor(0.5f, 0.5f, 0.5f, 1f);
+            GL.ClearColor(Color4.Gray);
 
             GL.Enable(EnableCap.DepthTest);
-            //??
-            //GL.MatrixMode(MatrixMode.Modelview);
-            //GL.LoadIdentity();
+            GL.MatrixMode(MatrixMode.Modelview);
 
+            GL.LoadIdentity();
+            GL.Translate(0f, 0f, -2f);
             GL.Scale(0.5f, 0.5f, 0.5f);
         }
 
         protected override void OnResize(ResizeEventArgs e)
         {
+            int width = e.Width;
+            int height = e.Height;
+
+            GL.Viewport(0, 0, width, height);
+
+            SetupProjectionMatrix(width, height);
+
             base.OnResize(e);
-            int size = ClientSize.X < ClientSize.Y ? ClientSize.X : ClientSize.Y;
-            int xPos = size < ClientSize.X ? ClientSize.X - size : 0;
-            GL.Viewport(xPos / 2, 0, size, size);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -55,8 +59,6 @@ namespace task2
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            //???
-            //GL.MatrixMode(MatrixMode.Modelview);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.Enable(EnableCap.CullFace);
 
@@ -99,7 +101,7 @@ namespace task2
             // Поворот по Х = смещение мыши по Y и наоборот для Y
             float rotateX = dy * 180 / this.Size.X;
             float rotateY = dx * 180 / this.Size.Y;
-            RotateCamera(-rotateX, -rotateY);
+            RotateCamera(rotateX, rotateY);
 
             m_mouseX = e.X;
             m_mouseY = e.Y;
@@ -119,6 +121,29 @@ namespace task2
         {
             m_leftButtonPressed = false;
             base.OnMouseLeave();
+        }
+
+        private void SetupProjectionMatrix(int width, int height)
+        {
+            GL.MatrixMode(MatrixMode.Projection);
+
+            double frustumSize = 0.5;
+
+            double aspectRatio = width / height;
+            double frustumHeight = frustumSize;
+            double frustumWidth = frustumHeight * aspectRatio;
+
+            if (frustumWidth < frustumSize && aspectRatio != 0)
+            {
+                frustumWidth = frustumSize;
+                frustumHeight = frustumWidth / aspectRatio;
+            }
+
+            GL.Frustum(
+                -frustumWidth * 0.5, frustumWidth * 0.5, // left, right
+                -frustumHeight * 0.5, frustumHeight * 0.5, // top, bottom
+                frustumSize * 0.5, frustumSize * 10 // znear, zfar
+            );
         }
 
         private void RotateCamera(float x, float y)

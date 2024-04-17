@@ -21,8 +21,7 @@ class Program
             NumberOfSamples = 0
         };
 
-        //CircleDiagram circleDiagram = new();
-        Torus torus = new Torus();
+        Torus torus = new();
 
         Window window = new(nativeWindowSettings, [torus]);
         window.Run();
