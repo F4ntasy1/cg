@@ -29,13 +29,14 @@ namespace task2
         protected override void OnLoad()
         {
             base.OnLoad();
-            // Цвет фона
-            GL.ClearColor(Color4.White);
+            GL.ClearColor(0.5f, 0.5f, 0.5f, 1f);
 
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
+            GL.Enable(EnableCap.DepthTest);
+            //??
+            //GL.MatrixMode(MatrixMode.Modelview);
+            //GL.LoadIdentity();
 
-            GL.Scale(1.5f, 1.5f, 1.5f);
+            GL.Scale(0.5f, 0.5f, 0.5f);
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -54,16 +55,13 @@ namespace task2
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
+            //???
+            //GL.MatrixMode(MatrixMode.Modelview);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
-
-            GL.LineWidth(3);
 
             foreach (IDrawable drawable in m_drawables)
             {
-                drawable.DrawLines();
-
                 GL.CullFace(CullFaceMode.Front);
                 drawable.Draw();
 
@@ -71,7 +69,7 @@ namespace task2
                 drawable.Draw();
             }
 
-            SwapBuffers(); // двойная буферизация
+            SwapBuffers();
             base.OnRenderFrame(args);
         }
 
