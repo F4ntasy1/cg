@@ -30,15 +30,12 @@ namespace task1
         protected override void OnLoad()
         {
             base.OnLoad();
-            // Цвет фона
             GL.ClearColor(Color4.White);
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.Enable(EnableCap.AlphaTest);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-            GL.Translate(0f, 0f, -1.1f);
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -48,8 +45,10 @@ namespace task1
 
             GL.Viewport(0, 0, width, height);
 
+            GL.PushMatrix();
             SetupProjectionMatrix(width, height);
-            GL.MatrixMode(MatrixMode.Modelview);
+            GL.Translate(0.0f, 0.0f, -1.0f);
+            GL.PopMatrix();
 
             base.OnResize(e);
         }
@@ -138,9 +137,10 @@ namespace task1
 
         private void SetupProjectionMatrix(int width, int height)
         {
-            double frustumSize = 0.5;
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
+
+            double frustumSize = 0.5;
 
             double aspectRatio = width / height;
             double frustumHeight = frustumSize;
@@ -155,7 +155,7 @@ namespace task1
             GL.Frustum(
                 -frustumWidth * 0.5, frustumWidth * 0.5, // left, right
                 -frustumHeight * 0.5, frustumHeight * 0.5, // top, bottom
-                frustumSize * 0.5, frustumSize * 10 // znear, zfar
+                frustumSize * 0.5, frustumSize * 30 // znear, zfar
             );
         }
 
