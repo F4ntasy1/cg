@@ -164,47 +164,13 @@ namespace task1
             GL.MatrixMode(MatrixMode.Modelview);
 
             GL.GetFloat(GetPName.ModelviewMatrix, out Matrix4 modelView);
-
+            // разобраться почему нужно брать координаты из строк а не из столбца
+            // разобраться что делает матрица камеры
             Vector3 xAxis = new(modelView[0, 0], modelView[1, 0], modelView[2, 0]);
             Vector3 yAxis = new(modelView[0, 1], modelView[1, 1], modelView[2, 1]);
 
             GL.Rotate(x, xAxis);
             GL.Rotate(y, yAxis);
-            NormalizeModelViewMatrix();
-        }
-
-        private void NormalizeModelViewMatrix()
-        {
-            GL.GetFloat(GetPName.ModelviewMatrix, out Matrix4 modelView);
-            /*
-            Ортонормирование - приведение координатных осей к единичной длине (нормирование)
-            и взаимной перпендикулярности (ортогонализация)
-            Достичь этого можно при помощи нормализации координатных осей
-            и векторного произведения
-            */
-            Vector3 xAxis = new(modelView[0, 0], modelView[1, 0], modelView[2, 0]);
-            xAxis.Normalize();
-            Vector3 yAxis = new(modelView[0, 1], modelView[1, 1], modelView[2, 1]);
-            yAxis.Normalize();
-
-            // Ось Z вычисляем через векторное произведение X и Y
-            // Z будет перпендикулярна плоскости векторов X и Y
-            Vector3 zAxis = Vector3.Cross(xAxis, yAxis);
-            // И иметь единичную длину
-            zAxis.Normalize();
-            // То же самое проделываем с осями x и y
-            xAxis = Vector3.Cross(yAxis, zAxis);
-            xAxis.Normalize();
-            yAxis = Vector3.Cross(zAxis, xAxis);
-            yAxis.Normalize();
-
-            // Сохраняем вектора координатных осей обратно в массив
-            modelView[0, 0] = xAxis.X; modelView[1, 0] = xAxis.Y; modelView[2, 0] = xAxis.Z;
-            modelView[0, 1] = yAxis.X; modelView[1, 1] = yAxis.Y; modelView[2, 1] = yAxis.Z;
-            modelView[0, 2] = zAxis.X; modelView[1, 2] = zAxis.Y; modelView[2, 2] = zAxis.Z;
-
-            // И загружаем матрицу моделирвания-вида
-            GL.LoadMatrix(ref modelView);
         }
 
         private void UpdateFramesCount(double time)

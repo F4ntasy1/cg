@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
+// исправить искажения при ресайзе окна
 namespace task2
 {
     public class Window : GameWindow
@@ -147,9 +148,9 @@ namespace task2
             }
 
             GL.Frustum(
-                -frustumWidth * 0.5, frustumWidth * 0.5, // left, right
-                -frustumHeight * 0.5, frustumHeight * 0.5, // top, bottom
-                frustumSize * 0.5, frustumSize * 50 // znear, zfar
+                -frustumWidth * frustumSize, frustumWidth * frustumSize, // left, right
+                -frustumHeight * frustumSize, frustumHeight * frustumSize, // top, bottom
+                frustumSize * frustumSize, frustumSize * 50 // znear, zfar
             );
         }
 
