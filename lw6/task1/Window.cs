@@ -18,7 +18,7 @@ namespace task6_1
         private float m_mouseX = 0;
         private float m_mouseY = 0;
 
-        private IDrawable chess;
+        private Chess chess;
 
         public Window(NativeWindowSettings nativeWindowSettings, IDrawable[] drawables)
             : base(GameWindowSettings.Default, nativeWindowSettings)
@@ -44,6 +44,9 @@ namespace task6_1
 
             chess = new Chess();
             m_drawables.Add(chess);
+
+            chess.SetGameStrategy(new ChessGame1());
+            chess.Play();
         }
 
         protected override void OnResize(ResizeEventArgs e)
