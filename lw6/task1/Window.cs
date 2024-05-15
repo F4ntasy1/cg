@@ -74,17 +74,17 @@ namespace task6_1
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.Enable(EnableCap.CullFace);
+            //GL.Enable(EnableCap.CullFace);
 
             for (int i = 0; i < m_drawables.Count; i++)
             {
                 IDrawable drawable = m_drawables[i];
 
-                GL.CullFace(CullFaceMode.Front);
+                //GL.CullFace(CullFaceMode.Front);
                 drawable.Draw();
 
-                GL.CullFace(CullFaceMode.Back);
-                drawable.Draw();
+                //GL.CullFace(CullFaceMode.Back);
+                //drawable.Draw();
             }
 
             SwapBuffers();

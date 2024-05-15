@@ -35,7 +35,7 @@ namespace task6_1
         private bool gameIsOn = false;
 
         private static float secondsBetweenMoves = 1f;
-        private static float animationStep = 80f * secondsBetweenMoves;
+        private static float animationStep = 2f * secondsBetweenMoves;
 
         private float maxFigureHeight = 60f;
 

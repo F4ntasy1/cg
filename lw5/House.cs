@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
+// устранить мeльтишение текстур
 namespace task5_1
 {
     public class House : IDrawable

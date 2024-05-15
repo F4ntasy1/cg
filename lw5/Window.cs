@@ -51,10 +51,7 @@ namespace task5_1
 
             GL.Viewport(0, 0, width, height);
 
-            GL.PushMatrix();
             SetupProjectionMatrix(width, height);
-            //GL.Translate(0.0f, 0.0f, -5.0f);
-            GL.PopMatrix();
 
             base.OnResize(e);
         }

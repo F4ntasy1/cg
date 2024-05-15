@@ -1,3 +1,5 @@
+#version 130
+
 void main()
 {
 	vec2 pos = gl_TexCoord[0].xy;
