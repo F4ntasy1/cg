@@ -9,7 +9,7 @@ class Program
     {
         NativeWindowSettings nativeWindowSettings = new()
         {
-            ClientSize = new Vector2i(2100, 1200),
+            ClientSize = new Vector2i(1600, 900),
             Location = new Vector2i(30, 30),
             WindowBorder = WindowBorder.Resizable,
             WindowState = WindowState.Normal,

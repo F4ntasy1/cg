@@ -35,6 +35,7 @@ namespace task7_1
             GL.Translate(0f, -1f, -2f);
 
             Shader vertexShader = new(ShaderType.VertexShader, "../../../vertex_shader.vsh");
+            vertexShader.CheckStatus();
 
             shaderProgram.AttachShader(vertexShader);
 
@@ -47,6 +48,8 @@ namespace task7_1
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            TransferModelViewProjectionMatrixToShader();
 
             int xLocation = shaderProgram.GetAttributeLocation("x");
 
@@ -130,6 +133,19 @@ namespace task7_1
         {
             m_leftButtonPressed = false;
             base.OnMouseLeave();
+        }
+
+        private void TransferModelViewProjectionMatrixToShader()
+        {
+            int modelViewProjectionMatrixLocation = GL.GetUniformLocation(shaderProgram.shaderProgram,
+                "modelViewProjectionMatrix");
+
+            GL.GetFloat(GetPName.ModelviewMatrix, out Matrix4 modelViewMatrix);
+            GL.GetFloat(GetPName.ProjectionMatrix, out Matrix4 projectionMatrix);
+
+            Matrix4 modelViewProjectionMatrix = modelViewMatrix * projectionMatrix;
+
+            GL.UniformMatrix4(modelViewProjectionMatrixLocation, false, ref modelViewProjectionMatrix);
         }
 
         private void SetupProjectionMatrix(double width, double height)

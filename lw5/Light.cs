@@ -14,8 +14,8 @@ namespace task5_1
         {
             GL.PushMatrix();
 
-            GL.Rotate(_t, 0, 0, 1f);
-            GL.Translate(2f, 0, 0f);
+            //GL.Rotate(_t, 0, 0, 1f);
+            GL.Translate(2f, 0, 1.5f);
             GL.Scale(0.4f, 0.4f, 0.4f);
 
             GL.Light(LightName.Light0, LightParameter.Position, Color4.White);

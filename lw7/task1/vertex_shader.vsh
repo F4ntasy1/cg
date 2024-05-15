@@ -1,4 +1,8 @@
+#version 130
+
 attribute float x;
+
+uniform mat4 modelViewProjectionMatrix;
 
 void main()
 {
@@ -7,7 +11,6 @@ void main()
     float y_prime = R * sin(x);
     float z_prime = 0;
 
-    gl_Vertex = vec4(x_prime, y_prime, z_prime, 1.0);
-    gl_Position = ftransform();
+    gl_Position = modelViewProjectionMatrix * vec4(x_prime, y_prime, z_prime, 1.0);
     gl_FrontColor = (gl_Position + vec4(1.0)) * 0.5;
 }
