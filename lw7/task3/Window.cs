@@ -3,6 +3,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
 
 namespace task7_1
 {
@@ -18,6 +19,9 @@ namespace task7_1
 
         private ShaderProgram shaderProgram;
 
+        private float progress = 0f;
+        private int progressDirection = 1;
+
         public Window(NativeWindowSettings nativeWindowSettings)
             : base(GameWindowSettings.Default, nativeWindowSettings)
         {
@@ -32,9 +36,9 @@ namespace task7_1
             base.OnLoad();
             GL.ClearColor(Color4.Gray);
 
-            GL.Translate(0f, 0f, -20f);
+            GL.Translate(0f, 0f, -35f);
 
-            return;
+            GL.Enable(EnableCap.DepthTest);
 
             Shader vertexShader = new(ShaderType.VertexShader, "../../../vertex_shader.vsh");
             vertexShader.CheckStatus();
@@ -49,13 +53,23 @@ namespace task7_1
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            //int xLocation = shaderProgram.GetAttributeLocation("x");
+            int modelViewProjectionMatrixLocation = GL.GetUniformLocation(shaderProgram.shaderProgram, 
+                "modelViewProjectionMatrix");
 
-            float step = 1;
+            GL.GetFloat(GetPName.ModelviewMatrix, out Matrix4 modelViewMatrix);
+            GL.GetFloat(GetPName.ProjectionMatrix, out Matrix4 projectionMatrix);
+
+            var modelViewProjectionMatrix = modelViewMatrix * projectionMatrix;
+            GL.UniformMatrix4(modelViewProjectionMatrixLocation, false, ref modelViewProjectionMatrix);
+
+            GL.Uniform1(GL.GetUniformLocation(shaderProgram.shaderProgram, "progress"), progress);
+
+            float step = 1f;
 
             GL.Begin(PrimitiveType.Quads);
+
             for (float x = -10; x <= 10; x += step)
             {
                 for (float y = -10; y <= 10; y += step)
@@ -66,7 +80,14 @@ namespace task7_1
                     GL.Vertex3(x, y + step, 0.0f);
                 }
             }
+
             GL.End();
+
+            if (progress >= 1f) progressDirection = 0;
+            else if (progress <= 0f) progressDirection = 1;
+
+            if (progressDirection == 1) progress += 0.005f;
+            else progress -= 0.005f;
 
             SwapBuffers();
             base.OnRenderFrame(args);
