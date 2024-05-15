@@ -1,4 +1,4 @@
-﻿namespace task7_3
+﻿namespace task7_1
 {
     public interface IDrawable
     {

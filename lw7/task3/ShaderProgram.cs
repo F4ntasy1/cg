@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace task7_3
+namespace task7_1
 {
     public class ShaderProgram
     {

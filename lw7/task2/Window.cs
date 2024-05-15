@@ -49,8 +49,6 @@ namespace task7_1
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            TransferModelViewProjectionMatrixToShader();
-
             GL.Begin(PrimitiveType.Quads);
 
             GL.TexCoord2(0, 0);
@@ -139,19 +137,6 @@ namespace task7_1
         {
             m_leftButtonPressed = false;
             base.OnMouseLeave();
-        }
-
-        private void TransferModelViewProjectionMatrixToShader()
-        {
-            int modelViewProjectionMatrixLocation = GL.GetUniformLocation(shaderProgram.shaderProgram,
-                "modelViewProjectionMatrix");
-
-            GL.GetFloat(GetPName.ModelviewMatrix, out Matrix4 modelViewMatrix);
-            GL.GetFloat(GetPName.ProjectionMatrix, out Matrix4 projectionMatrix);
-
-            Matrix4 modelViewProjectionMatrix = modelViewMatrix * projectionMatrix;
-
-            GL.UniformMatrix4(modelViewProjectionMatrixLocation, false, ref modelViewProjectionMatrix);
         }
 
         private void SetupProjectionMatrix(double width, double height)

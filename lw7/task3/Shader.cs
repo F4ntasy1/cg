@@ -1,6 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 
-namespace task7_3
+namespace task7_1
 {
     public class Shader
     {

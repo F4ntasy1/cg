@@ -4,7 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace task7_3
+namespace task7_1
 {
     public class Window : GameWindow
     {
@@ -32,9 +32,12 @@ namespace task7_3
             base.OnLoad();
             GL.ClearColor(Color4.Gray);
 
-            GL.Translate(0f, -1f, -2f);
+            GL.Translate(0f, 0f, -20f);
+
+            return;
 
             Shader vertexShader = new(ShaderType.VertexShader, "../../../vertex_shader.vsh");
+            vertexShader.CheckStatus();
 
             shaderProgram.AttachShader(vertexShader);
 
@@ -48,13 +51,20 @@ namespace task7_3
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            int xLocation = shaderProgram.GetAttributeLocation("x");
+            //int xLocation = shaderProgram.GetAttributeLocation("x");
 
-            GL.Begin(PrimitiveType.LineLoop);
-            for (float i = 0; i < 2 * MathF.PI; i += MathF.PI / 1000)
+            float step = 1;
+
+            GL.Begin(PrimitiveType.Quads);
+            for (float x = -10; x <= 10; x += step)
             {
-                GL.VertexAttrib1(xLocation, i);
-                GL.Vertex3(i, 0f, 0f);
+                for (float y = -10; y <= 10; y += step)
+                {
+                    GL.Vertex3(x, y, 0.0f);
+                    GL.Vertex3(x + step, y, 0.0f);
+                    GL.Vertex3(x + step, y + step, 0.0f);
+                    GL.Vertex3(x, y + step, 0.0f);
+                }
             }
             GL.End();
 
